@@ -89,4 +89,18 @@ public class volgtDAOimpl  extends OracleBaseDao implements volgtDAO {
         }
         return studenten;
     }
+    public boolean save(vak vak, student student) throws SQLException{
+        String sql = "INSERT INTO VAK (`STUDENT_ID`,`VAK_CODE`) VALUES (?,?)";
+        PreparedStatement statement = conn.prepareStatement(sql);
+        statement.setInt(1, student.getId());
+        statement.setString(2, vak.getCode());
+
+        int rowsInserted = statement.executeUpdate();
+        if (rowsInserted > 0) {
+            System.out.println("vak toegevoegd");
+            return true;
+        }
+        conn.close();
+        return false;
+    }
 }
