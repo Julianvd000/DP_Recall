@@ -58,4 +58,20 @@ public class klasDAOimpl  extends OracleBaseDao implements klasDAO {
         }
         return klassen;
     }
+    public boolean delete(klas klas) throws SQLException {
+        conn = this.getConnection();
+        String query = "DELETE FROM KLAS WHERE CODE = ? ";
+
+        PreparedStatement statement = conn.prepareStatement(query);
+        statement.setString(1, klas.getCode());
+
+
+        int rowsDeleted = statement.executeUpdate();
+        if (rowsDeleted > 0) {
+            System.out.println("klas verwijderd");
+            return true;
+        }
+        conn.close();
+        return false;
+    }
 }

@@ -54,13 +54,14 @@ public class student {
     @Override
     public String toString () {
         if (this.vakken == null){
-            return this.getNaam() + "zit in " + this.getKlas_code().toString();
+            return this.getNaam() + " zit in " + this.getKlas_code().toString();
         }else{
             String allevakken = "";
             for (vak vak: vakken) {
                 allevakken += vak.toString();
+                allevakken += ", ";
             }
-            return this.getNaam() + " zit in " + this.getKlas_code().toString() +" en heeft de vakken "+ allevakken;
+            return this.getNaam() + " zit in " + this.getKlas_code().toString() +" en heeft de vakken: "+ allevakken;
         }
 
     }
