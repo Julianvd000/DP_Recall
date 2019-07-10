@@ -28,4 +28,13 @@ public class klas {
     public void setStartjaar (int startjaar) {
         Startjaar = startjaar;
     }
+
+    @Override
+    public String toString () {
+        String returnString = "";
+        returnString +=  "de klas " + this.getCode();
+        if(this.getMentor() != null ){returnString += "heeft de mentor" +this.getMentor();}
+        returnString += " en begonnen in " + this.getStartjaar();
+        return returnString;
+    }
 }

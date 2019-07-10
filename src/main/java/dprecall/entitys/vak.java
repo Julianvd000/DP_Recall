@@ -28,4 +28,9 @@ public class vak {
     public void setECTS (int ECTS) {
         this.ECTS = ECTS;
     }
+
+    @Override
+    public String toString () {
+        return this.getCode() + ", heeft de naam " + this.getNaam() + " en het aantal punten "+ this.getECTS();
+    }
 }
