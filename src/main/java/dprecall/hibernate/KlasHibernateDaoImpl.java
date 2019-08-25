@@ -14,9 +14,9 @@ public class KlasHibernateDaoImpl extends HibernateBaseDao{
 		return klassen;
 	}
 	
-	public Klas findByKlasCode(String code) throws SQLException {
+	public Object findByKlasCode(String code) throws SQLException {
 		Session session = getSession();
-		Klas k = session.get(Klas.class, code);
+		Object k = session.get(Klas.class, code);
 		closeSession();
 		return k;
 	}

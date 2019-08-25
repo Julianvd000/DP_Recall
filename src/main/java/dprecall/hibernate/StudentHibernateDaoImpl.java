@@ -14,9 +14,9 @@ public class StudentHibernateDaoImpl extends HibernateBaseDao{
 		return studenten;
 	}
 	
-	public Student findByID(int id) throws SQLException {
+	public Object findByID(int id) throws SQLException {
 		Session session = getSession();
-		Student s = session.get(Student.class, id);
+		Object s = session.get(Student.class, id);
 		closeSession();
 		return s;
 	}

@@ -1,7 +1,6 @@
 package dprecall.hibernate;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -15,9 +14,9 @@ public class VakHibernateDaoImpl extends HibernateBaseDao{
 		return vakken;
 	}
 	
-	public Vak findByVakCode(String code) throws SQLException {
+	public Object findByVakCode(String code) throws SQLException {
 		Session session = getSession();
-		Vak v = session.get(Vak.class, code);
+		Object v = session.get(Vak.class, code);
 		closeSession();
 		return v;
 	}

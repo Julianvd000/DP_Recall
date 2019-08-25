@@ -9,7 +9,7 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 public class HibernateBaseDao {
-	public static final StandardServiceRegistry ssr = new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
+	public static final StandardServiceRegistry ssr = new StandardServiceRegistryBuilder().configure("dprecall/hibernate.cfg.xml").build();
 	public static final Metadata meta = new MetadataSources(ssr).getMetadataBuilder().build();
 	
 	public static SessionFactory factory;

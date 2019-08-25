@@ -7,7 +7,7 @@
     <session-factory>
         <property name="dialect">org.hibernate.dialect.Oracle10gDialect</property>
         <property name="connection.url">jdbc:oracle:thin:@//localhost:1521/XEPDB1</property>  
-        <property name="connection.username">Julian_2</property>
+        <property name="connection.username">JULIAN_2</property>
         <property name="connection.password">root</property>
         <property name="connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
     </session-factory>

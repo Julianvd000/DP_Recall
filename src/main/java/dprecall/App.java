@@ -19,13 +19,13 @@ public class App {
 
     public static void main(String[] arg) throws SQLException {
 
-        Klas klas1 = new Klas("V1A", "Meneer Janssen", 2019);
-        Student student1 = new Student(00001, "Dennis de Braan", null, "V1A");
+        Klas klas1 = new Klas("V1F", "Meneer Janssen", 2019);
+        Student student1 = new Student(00001, "Julian van Dijk", null, "V1A");
         Vak vak1 = new Vak("PROG", "Programmeren", 5);
         Volgt volgt1 = new Volgt(00001, "PROG");
 
-        Klas klas2 = new Klas("V1A", "Wilma Petersen", 2020);
-        Student student2 = new Student(00001, "Jelle de Snelle", null, "V1A");
+        Klas klas2 = new Klas("V1G", "Wilma Petersen", 2020);
+        Student student2 = new Student(00001, "maxmim hauss", null, "V1A");
         Vak vak2 = new Vak("WAC", "Web Application Construction", 5);
         //Testen of save() werkt
         System.out.println("save() test:");
