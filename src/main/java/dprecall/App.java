@@ -1,52 +1,54 @@
 package dprecall;
 
-import dprecall.DAO.volgtDAO;
 import dprecall.DOAimpl.klasDAOimpl;
 import dprecall.DOAimpl.studentDAOimpl;
+import dprecall.DOAimpl.vakDAOimpl;
 import dprecall.DOAimpl.volgtDAOimpl;
-import dprecall.entitys.klas;
-import dprecall.entitys.student;
-import dprecall.entitys.vak;
-import dprecall.entitys.volgt;
+import dprecall.entitys.Klas;
+import dprecall.entitys.Student;
+import dprecall.entitys.Vak;
+import dprecall.entitys.Volgt;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args ) throws SQLException
-    {
-        klasDAOimpl klasDAO = new klasDAOimpl();
-        volgtDAOimpl volgtDAO = new volgtDAOimpl();
-        studentDAOimpl studentDAO = new studentDAOimpl();
+public class App {
+    private static studentDAOimpl studentdao = new studentDAOimpl();
+    private static klasDAOimpl klasdao = new klasDAOimpl();
+    private static volgtDAOimpl volgtdao = new volgtDAOimpl();
+    private static vakDAOimpl vakdao = new vakDAOimpl();
 
-        //krijg alle klassen
-        List<klas> klassen = klasDAO.findAll();
-        for (klas klas: klassen) {
-            System.out.println(klas.toString());
-        }
-        //krijg alle studenten uit de klas v1e
-        List<student> studenten = klasDAO.findbyKlasCode("V1E");
+    public static void main(String[] arg) throws SQLException {
 
-        for (student student : studenten){
-            System.out.println(student.toString());
-        }
-        //een leerling met all zijn vakken.
-        String Naam = "Julian";
-        student studentOpgehaald = studentDAO.getStudent(Naam);
-        List<volgt> volgingStudent = volgtDAO.findbyStudent(studentOpgehaald);
-        List<vak> vakken = new ArrayList<vak>();
+        Klas klas1 = new Klas("V1A", "Meneer Janssen", 2019);
+        Student student1 = new Student(00001, "Dennis de Braan", null, "V1A");
+        Vak vak1 = new Vak("PROG", "Programmeren", 5);
+        Volgt volgt1 = new Volgt(00001, "PROG");
 
-        for (volgt volgt: volgingStudent) {
-            vakken.add(volgt.getVak());
-        }
-        studentOpgehaald.setVakken(vakken);
+        Klas klas2 = new Klas("V1A", "Wilma Petersen", 2020);
+        Student student2 = new Student(00001, "Jelle de Snelle", null, "V1A");
+        Vak vak2 = new Vak("WAC", "Web Application Construction", 5);
+        //Testen of save() werkt
+        System.out.println("save() test:");
 
-        System.out.println(studentOpgehaald.toString());
+        System.out.println("save klas " + klasdao.save(klas1));
+        System.out.println("save student " + studentdao.save(student1));
+        System.out.println("save vak " + vakdao.save(vak1));
+        System.out.println("save volgt " + volgtdao.save(volgt1));
+
+        //Testen of delete() werkt
+        System.out.println("delete() test:");
+        System.out.println("delete volgt " + volgtdao.delete(volgt1));
+        System.out.println("delete vak " + vakdao.delete(vak1));
+        System.out.println("delete student " + studentdao.delete(student1));
+        System.out.println("delete klas " + klasdao.delete(klas1));
+
+        //Testen of update() werkt
+        System.out.println("update() test:");
+        System.out.println("delete vak " + vakdao.update(vak2));
+        System.out.println("delete student " + studentdao.update(student2));
+        System.out.println("delete klas " + klasdao.update(klas2));
+
+        //Herstelt oude waarden om later opnieuw update() te kunnen testen
+
     }
 }

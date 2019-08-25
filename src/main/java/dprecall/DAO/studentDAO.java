@@ -1,14 +1,19 @@
 package dprecall.DAO;
 
-import dprecall.entitys.student;
-
 import java.sql.SQLException;
-import java.util.List;
+import java.util.ArrayList;
+import dprecall.entitys.Student;
 
 public interface studentDAO {
-    public List<student> findAll() throws SQLException;
-    public student getStudent(String naam)throws SQLException;
-    public boolean save(student student) throws SQLException;
-    public student update(student student) throws SQLException;
-    public boolean delete(student student) throws SQLException;
+    public ArrayList<Student> findAll() throws SQLException ;
+
+    public Student findByID(int id) throws SQLException ;
+
+    public ArrayList<Student> findStudentenByKlas(String klas) throws SQLException;
+
+    public Student save(Student student) throws SQLException;
+
+    public Student update(Student student) throws SQLException ;
+
+    public boolean delete(Student student);
 }

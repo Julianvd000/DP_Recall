@@ -2,119 +2,147 @@ package dprecall.DOAimpl;
 
 import dprecall.DAO.studentDAO;
 import dprecall.OracleBaseDao;
-import dprecall.entitys.klas;
-import dprecall.entitys.student;
+import dprecall.entitys.Student;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 
-public class studentDAOimpl  extends OracleBaseDao implements studentDAO {
-    private static Connection conn;
-    private List<student> studenten = new ArrayList<student>();
+public class studentDAOimpl extends OracleBaseDao implements studentDAO {
+    public ArrayList<Student> findAll() throws SQLException {
 
-    public List<student> findAll() throws SQLException{
-        List<student> studenten = new ArrayList<student>();
-        conn = this.getConnection();
+        Connection conn = getConnection();
+        Statement stmt = conn.createStatement();
+        ArrayList<Student> list = new ArrayList<Student>();
 
-        String sql = "SELECT * FROM STUDENT JOIN KLAS ON KLAS.CODE = STUDENT.KLAS_CODE";
-        Statement statement = conn.createStatement();
-        ResultSet result = statement.executeQuery(sql);
+        String queryText = "SELECT * FROM student";
+        ResultSet rs = stmt.executeQuery(queryText);
 
-        while (result.next()){
-            klas klas = new klas();
-            student student = new student();
+        while(rs.next()) {
+            int id = rs.getInt("id");
+            String naam = rs.getString("naam");
+            Date gbdatum = rs.getDate("gbdatum");
+            String klascode = rs.getString("klas_code");
 
-            student.setId(result.getInt("ID"));
-            student.setNaam(result.getString("NAAM"));
-            if (result.getDate("GBDATUM") != null){
-                student.setGbdatum(result.getDate("GBDATUM"));
-            }
-            if (result.getString("KLAS_CODE") != null){
-                klas.setCode(result.getString("KLAS.CODE"));
-                klas.setMentor(result.getString("KLAS.MENTOR"));
-                klas.setStartjaar(result.getInt("KLAS.STARTJAAR"));
-                student.setKlas_code(klas);
-            }
-            studenten.add(student);
+            Student s = new Student(id, naam, gbdatum, klascode);
+
+            list.add(s);
         }
-        conn.close();
-        return studenten;
+
+        rs.close();
+        stmt.close();
+
+
+        return list;
     }
 
-    public student getStudent(String naam)throws SQLException{
-        conn = this.getConnection();
-        String sql = "SELECT * FROM STUDENT JOIN KLAS ON KLAS.CODE = STUDENT.KLAS_CODE WHERE NAAM = ?";
-        PreparedStatement statement = conn.prepareStatement(sql);
-        statement.setString(1, naam);
-        ResultSet result = statement.executeQuery();
-        klas klas = new klas();
-        student student = new student();
+    public Student findByID(int id) throws SQLException {
+        Connection conn = getConnection();
+        String queryText2 = "SELECT * FROM student WHERE id = ?";
+        PreparedStatement pstmt = conn.prepareStatement(queryText2);
+        pstmt.setInt(1, id);
+        ResultSet rs = pstmt.executeQuery();
 
-        while (result.next()) {
-            student.setId(result.getInt("ID"));
-            student.setNaam(result.getString("NAAM"));
-            if (result.getDate("GBDATUM") != null) {
-                student.setGbdatum(result.getDate("GBDATUM"));
-            }
-            if (result.getString("KLAS_CODE") != null) {
-                klas.setCode(result.getString("CODE"));
-                klas.setMentor(result.getString("MENTOR"));
-                klas.setStartjaar(result.getInt("STARTJAAR"));
-                student.setKlas_code(klas);
-            }
+        rs.next();
+        int leerlingid = rs.getInt("id");
+        String naam = rs.getString("naam");
+        Date gbdatum = rs.getDate("gbdatum");
+        String klascode = rs.getString("klas_code");
+
+        Student s = new Student(leerlingid, naam, gbdatum, klascode);
+
+        rs.close();
+        pstmt.close();
+
+        return s;
+    }
+
+    public ArrayList<Student> findStudentenByKlas(String klas) throws SQLException {
+
+        Connection conn = getConnection();
+        Statement stmt = conn.createStatement();
+        ArrayList<Student> list = new ArrayList<Student>();
+
+        String queryText = "SELECT * FROM student WHERE klas_id = ?";
+        PreparedStatement pstmt = conn.prepareStatement(queryText);
+        pstmt.setString(1, klas);
+        ResultSet rs = pstmt.executeQuery(queryText);
+
+        while(rs.next()) {
+            int id = rs.getInt("id");
+            String naam = rs.getString("naam");
+            Date gbdatum = rs.getDate("gbdatum");
+            String klascode = rs.getString("klas_code");
+
+            Student s = new Student(id, naam, gbdatum, klascode);
+
+            list.add(s);
         }
+
+        rs.close();
+        stmt.close();
+
+
+        return list;
+    }
+
+    public Student save(Student student) throws SQLException {
+        Connection conn = getConnection();
+
+        String queryText = "INSERT INTO student VALUES (?,?,?,?)";
+        PreparedStatement pstmt = conn.prepareStatement(queryText);
+        pstmt.setInt(1, student.getID());
+        pstmt.setString(2, student.getNaam());
+        pstmt.setDate(3, (java.sql.Date) student.getGBdatum());
+        pstmt.setString(4, student.getKlasCode());
+        pstmt.executeUpdate();
+
+        pstmt.close();
+
+
         return student;
     }
-    public boolean save(student student) throws SQLException {
-        conn = this.getConnection();
-        String sql = "INSERT INTO VAK (`NAAM`,`GBDATUM`,`KLAS_CODE`) VALUES (?,?,?)";
-        PreparedStatement statement = conn.prepareStatement(sql);
-        statement.setString(1, student.getNaam());
-        statement.setDate(2, student.getGbdatum());
-        statement.setString(3, student.getKlas_code().getCode());
 
-        int rowsInserted = statement.executeUpdate();
-        if (rowsInserted > 0) {
-            System.out.println("vak toegevoegd");
-            return true;
-        }
-        conn.close();
-        return false;
-    }
+    public Student update(Student student) throws SQLException {
+        Connection conn = getConnection();
 
-    public student update(student student) throws SQLException {
-        conn = this.getConnection();
-        String query = "UPDATE STUDENT set NAAM = ?, GBDATUM = ?, KLAS_CODE = ? WHERE ID = ? ";
+        String queryText = "UPDATE student SET naam=?, gbdatum=?, klas_code=? WHERE id=?";
+        PreparedStatement pstmt = conn.prepareStatement(queryText);
+        pstmt.setString(1, student.getNaam());
+        pstmt.setDate(2, (java.sql.Date) student.getGBdatum());
+        pstmt.setString(3, student.getKlasCode());
+        pstmt.setInt(4, student.getID());
+        pstmt.executeUpdate();
 
-        PreparedStatement statement = conn.prepareStatement(query);
-        statement.setString(1,student.getNaam());
-        statement.setDate(2, student.getGbdatum());
-        statement.setString(3, student.getKlas_code().getCode());
+        pstmt.close();
 
-        int rowsUpdated = statement.executeUpdate();
-        if (rowsUpdated > 0) {
-            System.out.println("student aangepast");
-        }
-        conn.close();
+
         return student;
     }
 
-    public boolean delete(student student) throws SQLException {
-        conn = this.getConnection();
-        String query = "DELETE FROM STUDENT WHERE ID = ? ";
+    public boolean delete(Student student) {
+        try {
+            Connection conn = getConnection();
 
-        PreparedStatement statement = conn.prepareStatement(query);
-        statement.setInt(1, student.getId());
+            String queryText = "DELETE FROM student WHERE id = ?";
+            PreparedStatement pstmt = conn.prepareStatement(queryText);
+            pstmt.setInt(1, student.getID());
+            pstmt.executeUpdate();
+
+            pstmt.close();
 
 
-        int rowsDeleted = statement.executeUpdate();
-        if (rowsDeleted > 0) {
-            System.out.println("student verwijderd");
             return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
-        conn.close();
-        return false;
     }
 }
+
+

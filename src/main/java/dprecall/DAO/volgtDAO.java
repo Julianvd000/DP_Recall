@@ -1,14 +1,16 @@
 package dprecall.DAO;
 
-import dprecall.entitys.student;
-import dprecall.entitys.vak;
-import dprecall.entitys.volgt;
-
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import dprecall.entitys.Klas;
+import dprecall.entitys.Student;
+import dprecall.entitys.Vak;
+import dprecall.entitys.Volgt;
 
 public interface volgtDAO {
-    public List<volgt> findAll() throws SQLException;
-    public List<volgt> findbyStudent(student studentin) throws SQLException;
-    public boolean save(vak vak, student student) throws SQLException;
+    public ArrayList<Volgt> findAll() throws SQLException ;
+    public ArrayList<Volgt> findVakkenByStudent(Student student) throws SQLException;
+    public Volgt save(Volgt volgt) throws SQLException ;
+    public boolean delete(Volgt volgt) ;
 }

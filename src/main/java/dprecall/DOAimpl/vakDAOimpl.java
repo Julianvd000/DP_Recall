@@ -1,78 +1,109 @@
 package dprecall.DOAimpl;
 
-import dprecall.OracleBaseDao;
 import dprecall.DAO.vakDAO;
-import dprecall.entitys.student;
-import dprecall.entitys.vak;
+import dprecall.OracleBaseDao;
+import dprecall.entitys.Vak;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class vakDAOimpl extends OracleBaseDao implements vakDAO {
-    private Connection conn;
 
-    public boolean save(vak vak) throws SQLException {
-        String sql = "INSERT INTO VAK (`CODE`,`NAAM`,`ECTS`) VALUES (?,?,?)";
-        PreparedStatement statement = conn.prepareStatement(sql);
-        statement.setString(1, vak.getCode());
-        statement.setString(2, vak.getNaam());
-        statement.setInt(3, vak.getECTS());
+    public ArrayList<Vak> findAll() throws SQLException {
 
-        int rowsInserted = statement.executeUpdate();
-        if (rowsInserted > 0) {
-            System.out.println("vak toegevoegd");
-            return true;
+        Connection conn = getConnection();
+        Statement stmt = conn.createStatement();
+        ArrayList<Vak> list = new ArrayList<Vak>();
+
+        String queryText = "SELECT * FROM vak";
+        ResultSet rs = stmt.executeQuery(queryText);
+
+        while(rs.next()) {
+            String code = rs.getString("code");
+            String naam = rs.getString("naam");
+            int ects = rs.getInt("ects");
+
+            Vak v = new Vak(code, naam, ects);
+
+            list.add(v);
         }
-        conn.close();
-        return false;
+
+        rs.close();
+        stmt.close();
+
+
+        return list;
     }
-    public vak update(vak vak) throws SQLException {
-        conn = this.getConnection();
-        String query = "UPDATE VAK set NAAM = ?, CODE = ?, ECTS = ? WHERE ID = ? ";
 
-        PreparedStatement statement = conn.prepareStatement(query);
-        statement.setString(1,vak.getNaam());
-        statement.setString(2, vak.getCode());
-        statement.setInt(3, vak.getECTS());
+    public Vak findByCode(String code) throws SQLException {
+        Connection conn = getConnection();
+        String queryText2 = "SELECT * FROM vak WHERE code = ?";
+        PreparedStatement pstmt = conn.prepareStatement(queryText2);
+        pstmt.setString(1, code);
+        ResultSet rs = pstmt.executeQuery();
 
-        int rowsUpdated = statement.executeUpdate();
-        if (rowsUpdated > 0) {
-            System.out.println("vak aangepast");
-        }
-        conn.close();
+        rs.next();
+        String vakcode = rs.getString("code");
+        String naam = rs.getString("naam");
+        int ects = rs.getInt("ects");
+
+        Vak v = new Vak(vakcode, naam, ects);
+
+        rs.close();
+        pstmt.close();
+
+        return v;
+    }
+
+    public Vak save(Vak vak) throws SQLException {
+        Connection conn = getConnection();
+
+        String queryText = "INSERT INTO vak VALUES (?,?,?)";
+        PreparedStatement pstmt = conn.prepareStatement(queryText);
+        pstmt.setString(1, vak.getCode());
+        pstmt.setString(2, vak.getNaam());
+        pstmt.setInt(3, vak.getECTS());
+        pstmt.executeUpdate();
+
+        pstmt.close();
+
+
         return vak;
     }
 
-    public boolean delete(vak vak) throws SQLException {
-        conn = this.getConnection();
-        String query = "DELETE FROM VAK WHERE CODE = ? ";
 
-        PreparedStatement statement = conn.prepareStatement(query);
-        statement.setString(1, vak.getCode());
+    public Vak update(Vak vak) throws SQLException {
+        Connection conn = getConnection();
+
+        String queryText = "UPDATE vak SET naam=?, ects=? WHERE code=?";
+        PreparedStatement pstmt = conn.prepareStatement(queryText);
+        pstmt.setString(1, vak.getNaam());
+        pstmt.setInt(2, vak.getECTS());
+        pstmt.setString(3, vak.getCode());
+        pstmt.executeUpdate();
+
+        pstmt.close();
 
 
-        int rowsDeleted = statement.executeUpdate();
-        if (rowsDeleted > 0) {
-            System.out.println("vak verwijderd");
-            return true;
-        }
-        conn.close();
-        return false;
+        return vak;
     }
-    public List<vak> findAll() throws SQLException{
-        List<vak> vakken = new ArrayList<vak>();
-        conn = this.getConnection();
 
-        String sql = "SELECT * FROM VAK";
-        Statement statement = conn.createStatement();
-        ResultSet result = statement.executeQuery(sql);
+    public boolean delete(Vak vak) {
+        try {
+            Connection conn = getConnection();
 
-        while (result.next()){
-            vak vak = new vak();
-            vak.setECTS(result.getInt("ECTS"));
-            vakken.add(vak);
+            String queryText = "DELETE FROM vak WHERE code = ?";
+            PreparedStatement pstmt = conn.prepareStatement(queryText);
+            pstmt.setString(1, vak.getCode());
+            pstmt.executeUpdate();
+
+            pstmt.close();
+
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
-        return vakken;
     }
 }

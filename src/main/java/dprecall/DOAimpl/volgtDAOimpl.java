@@ -2,105 +2,99 @@ package dprecall.DOAimpl;
 
 import dprecall.DAO.volgtDAO;
 import dprecall.OracleBaseDao;
-import dprecall.entitys.klas;
-import dprecall.entitys.student;
-import dprecall.entitys.vak;
-import dprecall.entitys.volgt;
+import dprecall.entitys.Student;
+import dprecall.entitys.Volgt;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 
-public class volgtDAOimpl  extends OracleBaseDao implements volgtDAO {
-    private static Connection conn;
-    private List<student> studenten = new ArrayList<student>();
+public class volgtDAOimpl extends OracleBaseDao implements volgtDAO {
+    public ArrayList<Volgt> findAll() throws SQLException {
 
-    public List<volgt> findAll() throws SQLException {
-        List<volgt> studenten = new ArrayList<volgt>();
-        conn = this.getConnection();
+        Connection conn = getConnection();
+        Statement stmt = conn.createStatement();
+        ArrayList<Volgt> list = new ArrayList<Volgt>();
 
-        String sql = "SELECT * FROM VOLGT JOIN VAK on VOLGT.VAK_CODE = VAK.CODE JOIN STUDENT ON VOLGT.STUDENT_ID = STUDENT.ID JOIN KLAS ON KLAS.CODE = STUDENT.KLAS_CODE";
-        Statement statement = conn.createStatement();
-        ResultSet result = statement.executeQuery(sql);
+        String queryText = "SELECT * FROM volgt";
+        ResultSet rs = stmt.executeQuery(queryText);
 
-        while (result.next()){
-            klas klas = new klas();
-            student student = new student();
-            vak vak = new vak();
-            volgt volgt = new volgt();
+        while(rs.next()) {
+            int id = rs.getInt("student_id");
+            String code = rs.getString("vak_code");
 
-            student.setId(result.getInt("STUDENT.ID"));
-            student.setNaam(result.getString("STUDENT.NAAM"));
-            if (result.getDate("STUDENT.GBDATUM") != null){
-                student.setGbdatum(result.getDate("STUDENT.GBDATUM"));
-            }
-            if (result.getString("STUDENT.KLAS_CODE") != null){
-                klas.setCode(result.getString("KLAS.CODE"));
-                klas.setMentor(result.getString("KLAS.MENTOR"));
-                klas.setStartjaar(result.getInt("KLAS.STARTJAAR"));
-                student.setKlas_code(klas);
-            }
+            Volgt v = new Volgt(id, code);
 
-            volgt.setStudent(student);
-            vak.setCode(result.getString("VAK.CODE"));
-            vak.setNaam(result.getString("VAK.NAAM"));
-            vak.setECTS(result.getInt("VAK.ECTS"));
-
-            volgt.setVak(vak);
-            studenten.add(volgt);
+            list.add(v);
         }
-        return studenten;
+        rs.close();
+        stmt.close();
+
+
+        return list;
     }
 
-    public List<volgt> findbyStudent(student studentin) throws SQLException {
-        List<volgt> studenten = new ArrayList<volgt>();
-        conn = this.getConnection();
+    public ArrayList<Volgt> findVakkenByStudent(Student student) throws SQLException {
 
-        String sql = "SELECT STUDENT_ID, VAK_CODE, VAK.NAAM, VAK.ECTS, STUDENT.NAAM, STUDENT.GBDATUM, KLAS_CODE, KLAS.MENTOR, KLAS.STARTJAAR FROM VOLGT JOIN VAK on VOLGT.VAK_CODE = VAK.CODE JOIN STUDENT ON VOLGT.STUDENT_ID = STUDENT.ID JOIN KLAS ON KLAS.CODE = STUDENT.KLAS_CODE WHERE STUDENT_ID =?";
-        PreparedStatement statement = conn.prepareStatement(sql);
-        statement.setInt(1, studentin.getId());
-        ResultSet result = statement.executeQuery();
+        Connection conn = getConnection();
+        Statement stmt = conn.createStatement();
+        ArrayList<Volgt> list = new ArrayList<Volgt>();
 
-        while (result.next()){
-            klas klas = new klas();
-            student student = new student();
-            vak vak = new vak();
-            volgt volgt = new volgt();
+        String queryText = "SELECT * FROM volgt WHERE student_id = ?";
+        PreparedStatement pstmt = conn.prepareStatement(queryText);
+        pstmt.setInt(1, student.getID());
+        ResultSet rs = pstmt.executeQuery(queryText);
 
-            student.setId(result.getInt("STUDENT_ID"));
-            student.setNaam(result.getString("NAAM"));
-            if (result.getDate("GBDATUM") != null){
-                student.setGbdatum(result.getDate("GBDATUM"));
-            }
-            if (result.getString("KLAS_CODE") != null){
-                klas.setCode(result.getString("KLAS_CODE"));
-                klas.setMentor(result.getString("MENTOR"));
-                klas.setStartjaar(result.getInt("STARTJAAR"));
-                student.setKlas_code(klas);
-            }
+        while(rs.next()) {
+            int id = rs.getInt("student_id");
+            String code = rs.getString("vak_code");
 
-            volgt.setStudent(student);
-            vak.setCode(result.getString("VAK_CODE"));
-            vak.setNaam(result.getString("NAAM"));
-            vak.setECTS(result.getInt("ECTS"));
+            Volgt v = new Volgt(id, code);
 
-            volgt.setVak(vak);
-            studenten.add(volgt);
+            list.add(v);
         }
-        return studenten;
-    }
-    public boolean save(vak vak, student student) throws SQLException{
-        String sql = "INSERT INTO VAK (`STUDENT_ID`,`VAK_CODE`) VALUES (?,?)";
-        PreparedStatement statement = conn.prepareStatement(sql);
-        statement.setInt(1, student.getId());
-        statement.setString(2, vak.getCode());
 
-        int rowsInserted = statement.executeUpdate();
-        if (rowsInserted > 0) {
-            System.out.println("vak toegevoegd");
+        rs.close();
+        stmt.close();
+
+
+        return list;
+    }
+
+    public Volgt save(Volgt volgt) throws SQLException {
+        Connection conn = getConnection();
+
+        String queryText = "INSERT INTO volgt VALUES (?,?)";
+        PreparedStatement pstmt = conn.prepareStatement(queryText);
+        pstmt.setInt(1, volgt.getStudentID());
+        pstmt.setString(2, volgt.getVakCode());
+        pstmt.executeUpdate();
+
+        pstmt.close();
+
+
+        return volgt;
+    }
+
+    public boolean delete(Volgt volgt) {
+        try {
+            Connection conn = getConnection();
+
+            String queryText = "DELETE FROM volgt WHERE student_id = ?";
+            PreparedStatement pstmt = conn.prepareStatement(queryText);
+            pstmt.setInt(1, volgt.getStudentID());
+            pstmt.executeUpdate();
+
+            pstmt.close();
+
+
             return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
-        conn.close();
-        return false;
     }
 }
