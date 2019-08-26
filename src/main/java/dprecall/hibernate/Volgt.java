@@ -1,17 +1,20 @@
 package dprecall.hibernate;
 
 public class Volgt {
-	private int studentID;
-	private String vakCode;
+	private int student_id;
+	private String vak_code;
 	
 	public Volgt(int studentID, String vakCode) {
-		this.studentID = studentID;
-		this.vakCode = vakCode;
+		this.student_id = studentID;
+		this.vak_code = vakCode;
 	}
+
+	public Volgt () {
+	}
+
+	public int getStudentID() {return student_id;}
+	public String getVakCode() {return vak_code;}
 	
-	public int getStudentID() {return studentID;}
-	public String getVakCode() {return vakCode;}
-	
-	public void setStudentID(int studentID) {this.studentID = studentID;}
-	public void setVakCode(String vakCode) {this.vakCode = vakCode;}
+	public void setStudentID(int studentID) {this.student_id = studentID;}
+	public void setVakCode(String vakCode) {this.vak_code = vakCode;}
 }

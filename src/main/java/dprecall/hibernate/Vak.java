@@ -10,7 +10,10 @@ public class Vak {
 		this.naam = naam;
 		this.ects = ects;
 	}
-	
+
+	public Vak () {
+	}
+
 	public String getCode() {return code;}
 	public String getNaam() {return naam;}
 	public int getECTS() {return ects;}

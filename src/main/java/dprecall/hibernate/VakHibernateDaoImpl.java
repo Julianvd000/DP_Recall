@@ -9,22 +9,22 @@ public class VakHibernateDaoImpl extends HibernateBaseDao{
 	
 	public List<Vak> findAll() throws SQLException {
 		Session session = getSession();
-		List<Vak> vakken = session.createQuery("FROM vak").list();
-		closeSession();
+		List<Vak> vakken = session.createQuery("FROM Vak").list();
+		session.close();
 		return vakken;
 	}
 	
 	public Object findByVakCode(String code) throws SQLException {
 		Session session = getSession();
 		Object v = session.get(Vak.class, code);
-		closeSession();
+		session.close();
 		return v;
 	}
 
 	public Vak save(Vak vak) throws SQLException {
 		Session session = getSession();
 		session.save(vak);
-		closeSession();
+		session.close();
 		return vak;
 	}
 
@@ -32,7 +32,7 @@ public class VakHibernateDaoImpl extends HibernateBaseDao{
 	public Vak update(Vak vak) throws SQLException {
 		Session session = getSession();
 		session.update(vak);
-		closeSession();
+		session.close();
 		return vak;
 	}
 
@@ -40,7 +40,7 @@ public class VakHibernateDaoImpl extends HibernateBaseDao{
 		try {
 			Session session = getSession();
 			session.delete(vak);
-			closeSession();
+			session.close();
 			return true;
 		} catch (Exception e) {
 			System.out.println(e);

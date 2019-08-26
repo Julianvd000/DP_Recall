@@ -1,5 +1,6 @@
 package dprecall.hibernate;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -7,34 +8,34 @@ import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
 
 public class HibernateBaseDao {
-	public static final StandardServiceRegistry ssr = new StandardServiceRegistryBuilder().configure("dprecall/hibernate.cfg.xml").build();
-	public static final Metadata meta = new MetadataSources(ssr).getMetadataBuilder().build();
-	
-	public static SessionFactory factory;
-	public static Session session;
-	public static Transaction t;
-	
-	public Session getSession(){
-		session = factory.openSession();
-		t = session.beginTransaction();
-		
-		return session;
+	private static SessionFactory sessionFactory = buildSessionFactory();
+
+	private static SessionFactory buildSessionFactory() {
+		try {
+			StandardServiceRegistry standardRegistry = new StandardServiceRegistryBuilder()
+					.configure("hibernate.cfg.xml").build();
+			Metadata metadata = new MetadataSources(standardRegistry).getMetadataBuilder().build();
+			return metadata.getSessionFactoryBuilder().build();
+
+		} catch (HibernateException he) {
+			System.out.println("Session Factory creation failure");
+			throw he;
+		}
 	}
-	
-	public void closeSession(){
-		t.commit();
-		session.close();
+
+
+	public static SessionFactory getSessionFactory () {
+		if (sessionFactory == null) {
+			sessionFactory = buildSessionFactory();
+		}
+		return sessionFactory;
 	}
-	
-	public SessionFactory getFactory() {
-		factory = meta.getSessionFactoryBuilder().build();
-		
-		return factory;
-	}
-	
-	public void closeFactory() {
-		factory.close();
+
+
+	public static Session getSession () {
+		return getSessionFactory().openSession();
 	}
 }

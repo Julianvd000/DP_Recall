@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 5.4//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-5.3.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</property>
+        <property name="hibernate.connection.url">jdbc:oracle:thin:@//localhost:1521/XEPDB1</property>
+        <property name="hibernate.connection.username">JULIAN_2</property>
+        <property name="hibernate.connection.password">root</property>
+        <property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+        <mapping resource="Klas.hbm.xml"/>
+        <mapping resource="Log.hbm.xml"/>
+        <mapping resource="Student.hbm.xml"/>
+        <mapping resource="Vak.hbm.xml"/>
+        <mapping resource="Volgt.hbm.xml"/>
+    </session-factory>
+</hibernate-configuration> 

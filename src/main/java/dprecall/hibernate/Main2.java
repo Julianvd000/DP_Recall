@@ -14,8 +14,7 @@ public class Main2 {
 
 	
 	public static void main(String[] args) throws SQLException {
-		dao.getFactory();
-		
+
 		Klas klas1 = new Klas("V1A", "Meneer Janssen", 2019);
 		Student student1 = new Student(00001, "Dennis de Braan", null, "V1A");
 		Vak vak1 = new Vak("PROG", "Programmeren", 5);
@@ -75,7 +74,7 @@ public class Main2 {
 		System.out.println("ALLE VOLGTEN NA DELETE:");
 		printVolgten(volgtdao.findAll());
 		
-		dao.closeFactory();
+
 	}
 
 	public static void printStudent(Student s) {

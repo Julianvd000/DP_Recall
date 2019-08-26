@@ -9,29 +9,29 @@ public class KlasHibernateDaoImpl extends HibernateBaseDao{
 
 	public List<Klas> findAll() throws SQLException {
 		Session session = getSession();
-		List<Klas> klassen = session.createQuery("FROM klas").list();
-		closeSession();
+		List<Klas> klassen = session.createQuery("FROM Klas").list();
+		session.close();
 		return klassen;
 	}
 	
 	public Object findByKlasCode(String code) throws SQLException {
 		Session session = getSession();
 		Object k = session.get(Klas.class, code);
-		closeSession();
+		session.close();
 		return k;
 	}
 
 	public Klas save(Klas klas) throws SQLException {
 		Session session = getSession();
 		session.save(klas);
-		closeSession();
+		session.close();
 		return klas;
 	}
 
 	public Klas update(Klas klas) throws SQLException {
 		Session session = getSession();
 		session.update(klas);
-		closeSession();
+		session.close();
 		return klas;
 	}
 
@@ -39,7 +39,7 @@ public class KlasHibernateDaoImpl extends HibernateBaseDao{
 		try {
 			Session session = getSession();
 			session.delete(klas);
-			closeSession();
+			session.close();
 			return true;
 		} catch (Exception e) {
 			System.out.println(e);

@@ -3,16 +3,16 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated May 7, 2019 1:45:22 PM by Hibernate Tools 3.5.0.Final -->
 <hibernate-mapping>
-    <class name="hu.nl.hibernate.Vak" table="VAK">
+    <class name="dprecall.hibernate.Klas" table="KLAS">
         <id name="code" type="java.lang.String" access="field">
             <column name="CODE" />
             <generator class="assigned" />
         </id>
-        <property name="naam" type="java.lang.String" access="field">
-            <column name="NAAM" />
+        <property name="mentor" type="java.lang.String" access="field">
+            <column name="MENTOR" />
         </property>
-        <property name="ects" type="int" access="field">
-            <column name="ECTS" />
+        <property name="startjaar" type="int" access="field">
+            <column name="STARTJAAR" />
         </property>
     </class>
 </hibernate-mapping>

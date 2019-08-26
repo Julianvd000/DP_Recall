@@ -13,22 +13,22 @@ import org.hibernate.Session;
 public class VolgtHibernateDaoImpl extends HibernateBaseDao{
 	public List<Volgt> findAll() throws SQLException {
 		Session session = getSession();
-		List<Volgt> volgten = session.createQuery("FROM volgt").list();
-		closeSession();
+		List<Volgt> volgten = session.createQuery("FROM Volgt").list();
+		session.close();
 		return volgten;
 	}
 	
 	public List<Volgt> findVakkenByStudent(int id) throws SQLException {
 		Session session = getSession();
-		List<Volgt> volgten = session.createQuery("FROM volgt WHERE student_id = " + id).list();
-		closeSession();
+		List<Volgt> volgten = session.createQuery("FROM Volgt WHERE student_id = " + id).list();
+		session.close();
 		return volgten;
 	}
 
 	public Volgt save(Volgt volgt) throws SQLException {
 		Session session = getSession();
 		session.save(volgt);
-		closeSession();
+		session.close();
 		return volgt;
 	}
 
@@ -36,7 +36,7 @@ public class VolgtHibernateDaoImpl extends HibernateBaseDao{
 		try {
 			Session session = getSession();
 			session.delete(volgt);
-			closeSession();
+			session.close();
 			return true;
 		} catch (Exception e) {
 			System.out.println(e);

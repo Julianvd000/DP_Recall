@@ -9,36 +9,36 @@ import org.hibernate.Session;
 public class StudentHibernateDaoImpl extends HibernateBaseDao{
 	public List<Student> findAll() throws SQLException {
 		Session session = getSession();
-		List<Student> studenten = session.createQuery("FROM student").list();
-		closeSession();
+		List studenten = session.createQuery("From Student").list();
+		session.close();
 		return studenten;
 	}
 	
 	public Object findByID(int id) throws SQLException {
 		Session session = getSession();
 		Object s = session.get(Student.class, id);
-		closeSession();
+		session.close();
 		return s;
 	}
     
 	public List<Student> findByKlas(String code) throws SQLException {
 		Session session = getSession();
 		List<Student> studenten = session.createQuery("FROM student WHERE klas_code = " + code).list();
-		closeSession();
+		session.close();
 		return studenten;
 	}
 
 	public Student save(Student student) throws SQLException {
 		Session session = getSession();
 		session.save(student);
-		closeSession();
+		session.close();
 		return student;
 	}
 
 	public Student update(Student student) throws SQLException {
 		Session session = getSession();
 		session.update(student);
-		closeSession();
+		session.close();
 		return student;
 	}
 
@@ -46,7 +46,7 @@ public class StudentHibernateDaoImpl extends HibernateBaseDao{
 		try {
 			Session session = getSession();
 			session.delete(student);
-			closeSession();
+			session.close();;
 			return true;
 		} catch (Exception e) {
 			System.out.println(e);
