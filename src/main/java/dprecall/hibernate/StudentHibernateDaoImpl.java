@@ -11,7 +11,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 
-public class StudentHibernateDaoImpl extends HibernateBaseDao{
+public class StudentHibernateDaoImpl extends HibernateBaseDao implements StudentDAO{
 	public List<Student> findAll() throws SQLException {
 		Session session = getSession();
 		CriteriaBuilder cb = session.getCriteriaBuilder();

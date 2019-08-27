@@ -10,7 +10,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-public class VakHibernateDaoImpl extends HibernateBaseDao{
+public class VakHibernateDaoImpl extends HibernateBaseDao implements VakDAO{
 	
 	public List<Vak> findAll() throws SQLException {
 		Session session = getSession();
