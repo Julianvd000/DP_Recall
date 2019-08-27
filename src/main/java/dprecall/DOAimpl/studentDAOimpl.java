@@ -143,7 +143,7 @@ public class studentDAOimpl extends OracleBaseDao implements studentDAO {
             return false;
         }
     }
-    public ArrayList<Vak> vakken(Student student){
+    public ArrayList<Vak> krijgAlleVakken(Student student){
         ArrayList<Vak> vakken = new ArrayList<Vak>();
         Connection conn = getConnection();
         try {

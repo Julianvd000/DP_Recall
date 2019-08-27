@@ -2,10 +2,13 @@ package dprecall.DOAimpl;
 
 import dprecall.DAO.vakDAO;
 import dprecall.OracleBaseDao;
+import dprecall.entitys.Klas;
+import dprecall.entitys.Student;
 import dprecall.entitys.Vak;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class vakDAOimpl extends OracleBaseDao implements vakDAO {
 
@@ -87,7 +90,23 @@ public class vakDAOimpl extends OracleBaseDao implements vakDAO {
 
         return vak;
     }
+    public ArrayList<Student> krijgAlleStudenten(Vak vak){
+        ArrayList<Student> Studenten = new ArrayList<Student>();
+        Connection conn = getConnection();
+        try {
+            PreparedStatement prepStatement = conn.prepareStatement("SELECT Student.*, Klas.* FROM Student INNER JOIN VOLGT on Student.id = VOLGT.STUDENT_ID JOIN KLas on Klas.CODE = STUDENT.KLAS_CODE WHERE VOLGT.VAK_CODE = ? ");
+            prepStatement.setString(1, vak.getCode());
+            ResultSet rs = prepStatement.executeQuery();
+            while (rs.next()){
+                Klas newklas = new Klas(rs.getString("code"), rs.getString("Mentor"),rs.getInt("Startjaar"));
+                Student s = new Student(rs.getInt("id"), rs.getString("naam"), rs.getDate("gbdatum"), newklas);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
 
+        }
+        return Studenten;
+    }
     public boolean delete(Vak vak) {
         try {
             Connection conn = getConnection();

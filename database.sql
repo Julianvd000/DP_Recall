@@ -82,6 +82,8 @@ Insert into JULIAN_2.VAK (CODE,NAAM,ECTS) values ('PRG','Programmeren','5');
 Insert into JULIAN_2.VAK (CODE,NAAM,ECTS) values ('WAC','Web Application Construction','5');
 REM INSERTING into JULIAN_2.VOLGT
 SET DEFINE OFF;
+Insert into JULIAN_2.VOLGT (STUDENT_ID,VAK_CODE) values ('1','DP');
+Insert into JULIAN_2.VOLGT (STUDENT_ID,VAK_CODE) values ('1','WAC');
 Insert into JULIAN_2.VOLGT (STUDENT_ID,VAK_CODE) values ('2','DP');
 Insert into JULIAN_2.VOLGT (STUDENT_ID,VAK_CODE) values ('2','PRG');
 Insert into JULIAN_2.VOLGT (STUDENT_ID,VAK_CODE) values ('2','WAC');

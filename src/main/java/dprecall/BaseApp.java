@@ -26,7 +26,7 @@ public class BaseApp {
 
         ArrayList<Student>studenten = studentdao.findAll();
         for (Student student: studenten) {
-           student.setVakken(studentdao.vakken(student));
+           student.setVakken(studentdao.krijgAlleVakken(student));
         }
         ArrayList<Klas> KlasMetStudenten;
         for (Student student: studenten){
