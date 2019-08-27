@@ -5,26 +5,39 @@ import java.util.List;
 
 import org.hibernate.Session;
 
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 public class VakHibernateDaoImpl extends HibernateBaseDao{
 	
 	public List<Vak> findAll() throws SQLException {
 		Session session = getSession();
-		List<Vak> vakken = session.createQuery("FROM Vak").list();
-		session.close();
-		return vakken;
+		CriteriaBuilder cb = session.getCriteriaBuilder();
+		CriteriaQuery<Vak> q = cb.createQuery(Vak.class);
+		Root<Vak> c = q.from(Vak.class);
+
+		q.select(c);
+
+		TypedQuery<Vak> query = session.createQuery(q);
+
+		List<Vak> results = query.getResultList();
+
+		return results;
 	}
 	
 	public Object findByVakCode(String code) throws SQLException {
 		Session session = getSession();
 		Object v = session.get(Vak.class, code);
-		session.close();
+		session.getTransaction().commit();
 		return v;
 	}
 
 	public Vak save(Vak vak) throws SQLException {
 		Session session = getSession();
 		session.save(vak);
-		session.close();
+		session.getTransaction().commit();
 		return vak;
 	}
 
@@ -32,7 +45,7 @@ public class VakHibernateDaoImpl extends HibernateBaseDao{
 	public Vak update(Vak vak) throws SQLException {
 		Session session = getSession();
 		session.update(vak);
-		session.close();
+		session.getTransaction().commit();
 		return vak;
 	}
 
@@ -40,7 +53,7 @@ public class VakHibernateDaoImpl extends HibernateBaseDao{
 		try {
 			Session session = getSession();
 			session.delete(vak);
-			session.close();
+			session.getTransaction().commit();
 			return true;
 		} catch (Exception e) {
 			System.out.println(e);

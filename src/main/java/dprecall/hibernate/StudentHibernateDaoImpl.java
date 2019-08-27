@@ -5,13 +5,26 @@ import java.util.List;
 
 import org.hibernate.Session;
 
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 
 public class StudentHibernateDaoImpl extends HibernateBaseDao{
 	public List<Student> findAll() throws SQLException {
 		Session session = getSession();
-		List studenten = session.createQuery("From Student").list();
-		session.close();
-		return studenten;
+		CriteriaBuilder cb = session.getCriteriaBuilder();
+		CriteriaQuery<Student> q = cb.createQuery(Student.class);
+		Root<Student> c = q.from(Student.class);
+
+		q.select(c);
+
+		TypedQuery<Student> query = session.createQuery(q);
+
+		List<Student> results = query.getResultList();
+
+		return results;
 	}
 	
 	public Object findByID(int id) throws SQLException {
@@ -21,32 +34,28 @@ public class StudentHibernateDaoImpl extends HibernateBaseDao{
 		return s;
 	}
     
-	public List<Student> findByKlas(String code) throws SQLException {
-		Session session = getSession();
-		List<Student> studenten = session.createQuery("FROM student WHERE klas_code = " + code).list();
-		session.close();
-		return studenten;
-	}
-
 	public Student save(Student student) throws SQLException {
-		Session session = getSession();
-		session.save(student);
-		session.close();
+		Session s = getSession();
+		s.beginTransaction();
+		s.save(student);
+		s.getTransaction().commit();
 		return student;
 	}
 
 	public Student update(Student student) throws SQLException {
-		Session session = getSession();
-		session.update(student);
-		session.close();
+		Session s = getSession();
+		s.beginTransaction();
+		s.save(student);
+		s.getTransaction().commit();
 		return student;
 	}
 
 	public boolean delete(Student student) throws SQLException {
 		try {
-			Session session = getSession();
-			session.delete(student);
-			session.close();;
+			Session s = getSession();
+			s.beginTransaction();
+			s.delete(student);
+			s.getTransaction().commit();
 			return true;
 		} catch (Exception e) {
 			System.out.println(e);

@@ -70,12 +70,7 @@ public class klasDAOimpl extends OracleBaseDao implements klasDAO {
         ResultSet rs = pstmt.executeQuery(queryText);
 
         while(rs.next()) {
-            String code = rs.getString("code");
-            String klasmentor = rs.getString("mentor");
-            int startjaar = rs.getInt("startjaar");
-
-            Klas k = new Klas(code, klasmentor, startjaar);
-
+            Klas k = new Klas(rs.getString("code"), rs.getString("mentor"), rs.getInt("startjaar"));
             list.add(k);
         }
 

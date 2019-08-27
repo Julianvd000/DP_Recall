@@ -13,9 +13,9 @@ public class Student {
 	@Id
 	@Column(name="ID")
 	private int id;
-	@Column(name="ID")
+	@Column(name="NAAM")
 	private String naam;
-	@Column(name="ID")
+	@Column(name="GBDATUM")
 	private Date gbdatum;
 	@ManyToOne
 	@JoinColumn(name="KLAS_CODE", nullable=false)
@@ -35,7 +35,7 @@ public class Student {
 		this.gbdatum = gbdatum;
 		this.klas = klas;
 	}
-
+	public Student (){}
 	public int getId () {
 		return id;
 	}
@@ -88,10 +88,10 @@ public class Student {
 
 	@Override
 	public String toString () {
-		String Student = "id: " + this.getId() + " naam: " + this.getNaam() + " geboortedatum: " +  this.getGbdatum();
+		String Student = "id: " + this.getId() + " naam: " + this.getNaam() + " geboortedatum: " +  this.getGbdatum() +  " zit in klas: " + this.getKlas().getKlascode();
 		if (!vakken.isEmpty()){
+			Student += "\nHeeft de volgende vakken: \n";
 			for (Vak vak : vakken) {
-				Student += " Heeft de volgende vakken: \n";
 				Student += vak.toString();
 				Student += "\n";
 			}

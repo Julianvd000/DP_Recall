@@ -29,11 +29,8 @@ public class studentDAOimpl extends OracleBaseDao implements studentDAO {
             int id = rs.getInt("id");
             String naam = rs.getString("naam");
             Date gbdatum = rs.getDate("gbdatum");
-            String klascode = rs.getString("klas_code");
-
             Klas newklas = new Klas(rs.getString("klas_code"), rs.getString("Mentor"),rs.getInt("Startjaar"));
             Student s = new Student(id, naam, gbdatum, newklas);
-
             list.add(s);
         }
 

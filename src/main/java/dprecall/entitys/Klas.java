@@ -60,11 +60,11 @@ public class Klas {
 	public String toString () {
 		String Klas = "Klas: " + this.getKlascode() + " met de Mentor: " +this.getMentor()+ " Startjaar: " + this.getStartjaar();
 		if(!this.getStudenten().isEmpty()){
-			Klas += "Heeft de volgend studenten: \n";
+			Klas += "\nHeeft de volgend studenten: \n";
 			for (Student Student: this.getStudenten()) {
 				Klas += "~~ \n";
 				Klas += Student.toString();
-				Klas += "~~ \n";
+				Klas += "\n~~ \n";
 			}
 		}
 		return Klas;

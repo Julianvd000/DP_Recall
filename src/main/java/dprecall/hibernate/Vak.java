@@ -14,8 +14,11 @@ public class Vak {
 	private String naam;
 	@Column(name="ECTS")
 	private int ects;
-	@ManyToMany(mappedBy = "Student")
+	@ManyToMany(mappedBy = "vakken")
 	private Set<Student> studenten = new HashSet<>();
+
+	public Vak () {
+	}
 
 	public Vak(String code, String naam, int ects) {
 		this.code = code;

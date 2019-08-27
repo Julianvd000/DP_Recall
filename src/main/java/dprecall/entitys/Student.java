@@ -69,10 +69,10 @@ public class Student {
 
 	@Override
 	public String toString () {
-		String Student = "id: " + this.getId() + " naam: " + this.getNaam() + " geboortedatum: " +  this.getGbdatum();
+		String Student = "id: " + this.getId() + " naam: " + this.getNaam() + " geboortedatum: " +  this.getGbdatum() +  " zit in klas: " + this.getKlas().toString();
 		if (!vakken.isEmpty()){
+			Student += "\nHeeft de volgende vakken: \n";
 			for (Vak vak : vakken) {
-				Student += " Heeft de volgende vakken: \n";
 				Student += vak.toString();
 				Student += "\n";
 			}

@@ -16,13 +16,16 @@ public class Klas {
     private String mentor;
     @Column(name="STARTJAAR")
     private int startjaar;
-    @OneToMany(mappedBy="Klas")
-    private Set<Student> studenten = new HashSet<Student>();
+    @OneToMany(mappedBy="klas")
+    private Set<Student> student = new HashSet<Student>();
 
     public Klas(String klascode, String mentor, int startjaar) {
         this.klascode = klascode;
         this.mentor = mentor;
         this.startjaar = startjaar;
+    }
+
+    public Klas () {
     }
 
     public String getKlascode () {
@@ -50,20 +53,20 @@ public class Klas {
     }
 
     public Set<Student> getStudenten () {
-        return studenten;
+        return student;
     }
 
     public void setStudenten (Set<Student> studenten) {
-        this.studenten = studenten;
+        this.student = studenten;
     }
     public void voegStudentToe(Student student){
-        if (!this.studenten.contains(student)) {
-            this.studenten.add(student);
+        if (!this.student.contains(student)) {
+            this.student.add(student);
         }
     }
     public void verwijderStudent(Student student){
-        if (this.studenten.contains(student)) {
-            this.studenten.remove(student);
+        if (this.student.contains(student)) {
+            this.student.remove(student);
         }
     }
 
@@ -71,11 +74,11 @@ public class Klas {
     public String toString () {
         String Klas = "Klas: " + this.getKlascode() + " met de Mentor: " +this.getMentor()+ " Startjaar: " + this.getStartjaar();
         if(!this.getStudenten().isEmpty()){
-            Klas += "Heeft de volgend studenten: \n";
-            for (dprecall.hibernate.Student Student: this.getStudenten()) {
+            Klas += "\nHeeft de volgend studenten: \n";
+            for (Student Student: this.getStudenten()) {
                 Klas += "~~ \n";
                 Klas += Student.toString();
-                Klas += "~~ \n";
+                Klas += "\n~~ \n";
             }
         }
         return Klas;
