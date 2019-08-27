@@ -10,10 +10,8 @@
         <property name="hibernate.connection.username">JULIAN_2</property>
         <property name="hibernate.connection.password">root</property>
         <property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
-        <mapping resource="Klas.hbm.xml"/>
-        <mapping resource="Log.hbm.xml"/>
-        <mapping resource="Student.hbm.xml"/>
-        <mapping resource="Vak.hbm.xml"/>
-        <mapping resource="Volgt.hbm.xml"/>
+        <mapping class="dprecall.hibernate.Klas"/>
+        <mapping class="dprecall.hibernate.Student"/>
+        <mapping class="dprecall.hibernate.Vak"/>
     </session-factory>
 </hibernate-configuration> 

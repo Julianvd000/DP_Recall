@@ -2,7 +2,9 @@ package dprecall.DOAimpl;
 
 import dprecall.DAO.studentDAO;
 import dprecall.OracleBaseDao;
+import dprecall.entitys.Klas;
 import dprecall.entitys.Student;
+import dprecall.entitys.Vak;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,7 +22,7 @@ public class studentDAOimpl extends OracleBaseDao implements studentDAO {
         Statement stmt = conn.createStatement();
         ArrayList<Student> list = new ArrayList<Student>();
 
-        String queryText = "SELECT * FROM student";
+        String queryText = "SELECT * FROM student join klas on klas.code = student.klas_code ";
         ResultSet rs = stmt.executeQuery(queryText);
 
         while(rs.next()) {
@@ -29,7 +31,8 @@ public class studentDAOimpl extends OracleBaseDao implements studentDAO {
             Date gbdatum = rs.getDate("gbdatum");
             String klascode = rs.getString("klas_code");
 
-            Student s = new Student(id, naam, gbdatum, klascode);
+            Klas newklas = new Klas(rs.getString("klas_code"), rs.getString("Mentor"),rs.getInt("Startjaar"));
+            Student s = new Student(id, naam, gbdatum, newklas);
 
             list.add(s);
         }
@@ -43,7 +46,7 @@ public class studentDAOimpl extends OracleBaseDao implements studentDAO {
 
     public Student findByID(int id) throws SQLException {
         Connection conn = getConnection();
-        String queryText2 = "SELECT * FROM student WHERE id = ?";
+        String queryText2 = "SELECT * FROM student join klas on klas.code = student.klas_code  WHERE id = ?";
         PreparedStatement pstmt = conn.prepareStatement(queryText2);
         pstmt.setInt(1, id);
         ResultSet rs = pstmt.executeQuery();
@@ -54,7 +57,8 @@ public class studentDAOimpl extends OracleBaseDao implements studentDAO {
         Date gbdatum = rs.getDate("gbdatum");
         String klascode = rs.getString("klas_code");
 
-        Student s = new Student(leerlingid, naam, gbdatum, klascode);
+        Klas newklas = new Klas(rs.getString("klas_code"), rs.getString("Mentor"),rs.getInt("Startjaar"));
+        Student s = new Student(id, naam, gbdatum, newklas);
 
         rs.close();
         pstmt.close();
@@ -62,25 +66,24 @@ public class studentDAOimpl extends OracleBaseDao implements studentDAO {
         return s;
     }
 
-    public ArrayList<Student> findStudentenByKlas(String klas) throws SQLException {
+        public ArrayList<Student> findStudentenByKlas(Klas klas) throws SQLException {
 
         Connection conn = getConnection();
         Statement stmt = conn.createStatement();
         ArrayList<Student> list = new ArrayList<Student>();
 
-        String queryText = "SELECT * FROM student WHERE klas_id = ?";
+        String queryText = "SELECT * FROM student join klas on klas.code = student.klas_code WHERE klas_code = ?";
         PreparedStatement pstmt = conn.prepareStatement(queryText);
-        pstmt.setString(1, klas);
+        pstmt.setString(1, klas.getKlascode());
         ResultSet rs = pstmt.executeQuery(queryText);
 
         while(rs.next()) {
             int id = rs.getInt("id");
             String naam = rs.getString("naam");
             Date gbdatum = rs.getDate("gbdatum");
-            String klascode = rs.getString("klas_code");
 
-            Student s = new Student(id, naam, gbdatum, klascode);
-
+            Klas newklas = new Klas(rs.getString("code"), rs.getString("Mentor"),rs.getInt("Startjaar"));
+            Student s = new Student(id, naam, gbdatum, newklas);
             list.add(s);
         }
 
@@ -96,10 +99,10 @@ public class studentDAOimpl extends OracleBaseDao implements studentDAO {
 
         String queryText = "INSERT INTO student VALUES (?,?,?,?)";
         PreparedStatement pstmt = conn.prepareStatement(queryText);
-        pstmt.setInt(1, student.getID());
+        pstmt.setInt(1, student.getId());
         pstmt.setString(2, student.getNaam());
-        pstmt.setDate(3, (java.sql.Date) student.getGBdatum());
-        pstmt.setString(4, student.getKlasCode());
+        pstmt.setDate(3, (java.sql.Date) student.getGbdatum());
+        pstmt.setString(4, student.getKlas().getKlascode());
         pstmt.executeUpdate();
 
         pstmt.close();
@@ -114,9 +117,9 @@ public class studentDAOimpl extends OracleBaseDao implements studentDAO {
         String queryText = "UPDATE student SET naam=?, gbdatum=?, klas_code=? WHERE id=?";
         PreparedStatement pstmt = conn.prepareStatement(queryText);
         pstmt.setString(1, student.getNaam());
-        pstmt.setDate(2, (java.sql.Date) student.getGBdatum());
-        pstmt.setString(3, student.getKlasCode());
-        pstmt.setInt(4, student.getID());
+        pstmt.setDate(2, (java.sql.Date) student.getGbdatum());
+        pstmt.setString(3, student.getKlas().getKlascode());
+        pstmt.setInt(4, student.getId());
         pstmt.executeUpdate();
 
         pstmt.close();
@@ -131,7 +134,7 @@ public class studentDAOimpl extends OracleBaseDao implements studentDAO {
 
             String queryText = "DELETE FROM student WHERE id = ?";
             PreparedStatement pstmt = conn.prepareStatement(queryText);
-            pstmt.setInt(1, student.getID());
+            pstmt.setInt(1, student.getId());
             pstmt.executeUpdate();
 
             pstmt.close();
@@ -142,6 +145,23 @@ public class studentDAOimpl extends OracleBaseDao implements studentDAO {
             e.printStackTrace();
             return false;
         }
+    }
+    public ArrayList<Vak> vakken(Student student){
+        ArrayList<Vak> vakken = new ArrayList<Vak>();
+        Connection conn = getConnection();
+        try {
+        PreparedStatement prepStatement = conn.prepareStatement("SELECT VAK.* FROM VAK INNER JOIN VOLGT on VAK.CODE = VOLGT.VAK_CODE WHERE VOLGT.STUDENT_ID =? ");
+        prepStatement.setInt(1, student.getId());
+        ResultSet result = prepStatement.executeQuery();
+        while (result.next()){
+            Vak newvak = new Vak(result.getString("Code"), result.getString("NAAM"), result.getInt("ECTS"));
+            vakken.add(newvak);
+        }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return vakken;
     }
 }
 

@@ -1,32 +1,83 @@
 package dprecall.hibernate;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "KLAS")
 public class Klas {
-	private String code;
-	private String mentor;
-	private int startjaar;
-	
-	public Klas(String klascode, String mentor, int startjaar) {
-		this.code = klascode;
-		this.mentor = mentor;
-		this.startjaar = startjaar;
-	}
 
-	public Klas () {
-	}
+    @Id
+    @Column(name="CODE")
+    private String klascode;
+    @Column(name="MENTOR")
+    private String mentor;
+    @Column(name="STARTJAAR")
+    private int startjaar;
+    @OneToMany(mappedBy="Klas")
+    private Set<Student> studenten = new HashSet<Student>();
 
-	public void setCode (String code) {
-		this.code = code;
-	}
+    public Klas(String klascode, String mentor, int startjaar) {
+        this.klascode = klascode;
+        this.mentor = mentor;
+        this.startjaar = startjaar;
+    }
 
-	public void setMentor (String mentor) {
-		this.mentor = mentor;
-	}
+    public String getKlascode () {
+        return klascode;
+    }
 
-	public void setStartjaar (int startjaar) {
-		this.startjaar = startjaar;
-	}
+    public void setKlascode (String klascode) {
+        this.klascode = klascode;
+    }
 
-	public String getKlasCode() {return code;}
-	public String getMentor() {return mentor;}
-	public int getStartjaar() {return startjaar;}
+    public String getMentor () {
+        return mentor;
+    }
+
+    public void setMentor (String mentor) {
+        this.mentor = mentor;
+    }
+
+    public int getStartjaar () {
+        return startjaar;
+    }
+
+    public void setStartjaar (int startjaar) {
+        this.startjaar = startjaar;
+    }
+
+    public Set<Student> getStudenten () {
+        return studenten;
+    }
+
+    public void setStudenten (Set<Student> studenten) {
+        this.studenten = studenten;
+    }
+    public void voegStudentToe(Student student){
+        if (!this.studenten.contains(student)) {
+            this.studenten.add(student);
+        }
+    }
+    public void verwijderStudent(Student student){
+        if (this.studenten.contains(student)) {
+            this.studenten.remove(student);
+        }
+    }
+
+    @Override
+    public String toString () {
+        String Klas = "Klas: " + this.getKlascode() + " met de Mentor: " +this.getMentor()+ " Startjaar: " + this.getStartjaar();
+        if(!this.getStudenten().isEmpty()){
+            Klas += "Heeft de volgend studenten: \n";
+            for (dprecall.hibernate.Student Student: this.getStudenten()) {
+                Klas += "~~ \n";
+                Klas += Student.toString();
+                Klas += "~~ \n";
+            }
+        }
+        return Klas;
+    }
 }

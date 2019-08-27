@@ -18,4 +18,9 @@ public class Vak {
 	public void setCode(String code) {this.code = code;}
 	public void setNaam(String naam) {this.naam = naam;}
 	public void setECTS(int ects) {this.ects = ects;}
+
+	@Override
+	public String toString () {
+		return "Code: " +this.getCode()+ " Naam: " +this.getNaam()+ " Aantal ECTS: " + this.getECTS();
+	}
 }

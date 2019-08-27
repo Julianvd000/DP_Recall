@@ -2,6 +2,8 @@ package dprecall.DAO;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import dprecall.entitys.Klas;
 import dprecall.entitys.Student;
 
 public interface studentDAO {
@@ -9,7 +11,7 @@ public interface studentDAO {
 
     public Student findByID(int id) throws SQLException ;
 
-    public ArrayList<Student> findStudentenByKlas(String klas) throws SQLException;
+    public ArrayList<Student> findStudentenByKlas(Klas klas) throws SQLException;
 
     public Student save(Student student) throws SQLException;
 

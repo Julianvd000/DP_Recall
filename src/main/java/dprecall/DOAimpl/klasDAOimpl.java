@@ -3,6 +3,7 @@ package dprecall.DOAimpl;
 import dprecall.DAO.klasDAO;
 import dprecall.OracleBaseDao;
 import dprecall.entitys.Klas;
+import dprecall.entitys.Student;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -90,7 +91,7 @@ public class klasDAOimpl extends OracleBaseDao implements klasDAO {
 
         String queryText = "INSERT INTO klas VALUES (?,?,?)";
         PreparedStatement pstmt = conn.prepareStatement(queryText);
-        pstmt.setString(1, klas.getKlasCode());
+        pstmt.setString(1, klas.getKlascode());
         pstmt.setString(2, klas.getMentor());
         pstmt.setInt(3, klas.getStartjaar());
         pstmt.executeUpdate();
@@ -108,7 +109,7 @@ public class klasDAOimpl extends OracleBaseDao implements klasDAO {
         PreparedStatement pstmt = conn.prepareStatement(queryText);
         pstmt.setString(1, klas.getMentor());
         pstmt.setInt(2, klas.getStartjaar());
-        pstmt.setString(3, klas.getKlasCode());
+        pstmt.setString(3, klas.getKlascode());
         pstmt.executeUpdate();
 
         pstmt.close();
@@ -116,14 +117,31 @@ public class klasDAOimpl extends OracleBaseDao implements klasDAO {
 
         return klas;
     }
+    public ArrayList<Student> getAllStudenten(Klas klas){
+        ArrayList<Student> Studenten = new ArrayList<Student>();
+        Connection conn = getConnection();
+        try {
+            PreparedStatement prepStatement = conn.prepareStatement("SELECT STUDENT.*,KLAS.* FROM STUDENT join KLAS on STUDENT.KLAS_CODE= KLAS.CODE WHERE STUDENT.KLAS_CODE = ? ");
+            prepStatement.setString(1, klas.getKlascode());
+            ResultSet result = prepStatement.executeQuery();
+            while (result.next()){
+                Klas newklas = new Klas(result.getString("CODE"),result.getString("MENTOR"), result.getInt("STARTJAAR"));
+                Student newstudent = new Student(result.getInt("ID"), result.getString("NAAM"), result.getDate("GBDATUM"), newklas);
+                Studenten.add(newstudent);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
 
+        }
+        return Studenten;
+    }
     public boolean delete(Klas klas) {
         try {
             Connection conn = getConnection();
 
             String queryText = "DELETE FROM klas WHERE code = ?";
             PreparedStatement pstmt = conn.prepareStatement(queryText);
-            pstmt.setString(1, klas.getKlasCode());
+            pstmt.setString(1, klas.getKlascode());
             pstmt.executeUpdate();
 
             pstmt.close();
