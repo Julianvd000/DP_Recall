@@ -1,5 +1,5 @@
 --------------------------------------------------------
---  File created - maandag-augustus-26-2019
+--  File created - dinsdag-augustus-27-2019
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for Table KLAS
@@ -63,10 +63,17 @@
   TABLESPACE "USERS" ;
 REM INSERTING into JULIAN_2.KLAS
 SET DEFINE OFF;
+Insert into JULIAN_2.KLAS (CODE,MENTOR,STARTJAAR) values ('V1D','Dennis Gerdings','2019');
+Insert into JULIAN_2.KLAS (CODE,MENTOR,STARTJAAR) values ('V1E','Dennis Gerdings','2019');
+Insert into JULIAN_2.KLAS (CODE,MENTOR,STARTJAAR) values ('V1G','Maarten Kaspbergen','2019');
+Insert into JULIAN_2.KLAS (CODE,MENTOR,STARTJAAR) values ('V1H','Dennis Gerdings','2019');
+Insert into JULIAN_2.KLAS (CODE,MENTOR,STARTJAAR) values ('V1C','Wilma Petersen','2019');
 Insert into JULIAN_2.KLAS (CODE,MENTOR,STARTJAAR) values ('V1A','Meneer Janssen','2019');
 Insert into JULIAN_2.KLAS (CODE,MENTOR,STARTJAAR) values ('V1B','Wilma Petersen','2019');
+Insert into JULIAN_2.KLAS (CODE,MENTOR,STARTJAAR) values ('V1F','Meneer Janssen','2019');
 REM INSERTING into JULIAN_2.STUDENT
 SET DEFINE OFF;
+Insert into JULIAN_2.STUDENT (ID,NAAM,GBDATUM,KLAS_CODE) values ('1','Julian van Dijk',null,'V1B');
 Insert into JULIAN_2.STUDENT (ID,NAAM,GBDATUM,KLAS_CODE) values ('2','Jelle de Snelle',null,'V1B');
 REM INSERTING into JULIAN_2.VAK
 SET DEFINE OFF;

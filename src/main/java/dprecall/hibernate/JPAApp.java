@@ -7,7 +7,7 @@ import java.util.List;
 import org.hibernate.Session;
 
 
-public class App extends HibernateBaseDao {
+public class JPAApp extends HibernateBaseDao {
     private static Session session;
 
     public static void main (String[] args) throws SQLException, ParseException {

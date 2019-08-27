@@ -10,7 +10,7 @@ import dprecall.entitys.Vak;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class App {
+public class BaseApp {
     private static studentDAOimpl studentdao = new studentDAOimpl();
     private static klasDAOimpl klasdao = new klasDAOimpl();
     private static vakDAOimpl vakdao = new vakDAOimpl();
