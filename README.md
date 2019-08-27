@@ -1,5 +1,9 @@
+# Dp herkansing
+
+# runners
 ```
-p1,2,3: App.main 
-hibernate p4: Main.main
-hibernate p5: Main2.main
+De eerste 3p lijn opdrachten Combined in Package(DAO, DAOimpl, Entitys)
+App.main
+De P4/5 Hibernate combined in Package(hibernate)
+App.main
 ```
