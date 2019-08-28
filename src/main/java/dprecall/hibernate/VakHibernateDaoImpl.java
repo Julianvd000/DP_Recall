@@ -23,37 +23,44 @@ public class VakHibernateDaoImpl extends HibernateBaseDao implements VakDAO{
 		TypedQuery<Vak> query = session.createQuery(q);
 
 		List<Vak> results = query.getResultList();
-
 		return results;
 	}
 	
 	public Object findByVakCode(String code) throws SQLException {
 		Session session = getSession();
+		session.beginTransaction();
 		Object v = session.get(Vak.class, code);
 		session.getTransaction().commit();
+		session.close();
 		return v;
 	}
 
 	public Vak save(Vak vak) throws SQLException {
 		Session session = getSession();
+		session.beginTransaction();
 		session.save(vak);
 		session.getTransaction().commit();
+		session.close();
 		return vak;
 	}
 
 
 	public Vak update(Vak vak) throws SQLException {
 		Session session = getSession();
+		session.beginTransaction();
 		session.update(vak);
 		session.getTransaction().commit();
+		session.close();
 		return vak;
 	}
 
 	public boolean delete(Vak vak) throws SQLException {
 		try {
 			Session session = getSession();
+			session.beginTransaction();
 			session.delete(vak);
 			session.getTransaction().commit();
+			session.close();
 			return true;
 		} catch (Exception e) {
 			System.out.println(e);

@@ -14,6 +14,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static org.osgi.util.measurement.Unit.s;
+
 
 public class studentDAOimpl extends OracleBaseDao implements studentDAO {
     public ArrayList<Student> findAll() throws SQLException {
@@ -107,6 +109,38 @@ public class studentDAOimpl extends OracleBaseDao implements studentDAO {
 
         return student;
     }
+    public int findIdByObj(Student s) {
+        Connection conn = getConnection();
+        int id = 0;
+        try {
+            String query1 = "SELECT * FROM STUDENT WHERE NAAM = ? AND GBDATUM = ? AND KLAS_CODE = ?";
+            PreparedStatement pstmt1 = conn.prepareStatement(query1);
+            pstmt1.setString(1, s.getNaam());
+            pstmt1.setDate(2, (java.sql.Date) s.getGbdatum());
+            pstmt1.setString(3, s.getKlas().getKlascode());
+            ResultSet rs = pstmt1.executeQuery();
+            while (rs.next()) {
+                id = rs.getInt("ID");
+            }
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+        return id;
+    }
+    public Student StudentVolgtVak(Student student, Vak vak) throws SQLException {
+        Connection conn = getConnection();
+
+        String queryText = "INSERT INTO VOLGT VALUES (?,?)";
+        PreparedStatement pstmt = conn.prepareStatement(queryText);
+        pstmt.setInt(1, student.getId());
+        pstmt.setString(2, vak.getCode());
+        pstmt.executeUpdate();
+
+        pstmt.close();
+
+
+        return student;
+    }
 
     public Student update(Student student) throws SQLException {
         Connection conn = getConnection();
@@ -126,22 +160,31 @@ public class studentDAOimpl extends OracleBaseDao implements studentDAO {
     }
 
     public boolean delete(Student student) {
-        try {
-            Connection conn = getConnection();
+        Connection conn = getConnection();
+        String query = "DELETE FROM VOLGT WHERE STUDENT_ID = ?";
+        String query2 = "DELETE FROM STUDENT WHERE ID = ?";
 
-            String queryText = "DELETE FROM student WHERE id = ?";
-            PreparedStatement pstmt = conn.prepareStatement(queryText);
-            pstmt.setInt(1, student.getId());
+        // dit checkt of het object een geldig ID heeft en haalt deze wanneer nodig op uit de database
+        int id = 0;
+        if (student.getId() == 0) {
+            id = findIdByObj(student);
+        } else {
+            id = student.getId();
+        }
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setInt(1, id);
             pstmt.executeUpdate();
 
-            pstmt.close();
-
-
+            PreparedStatement pstmt2 = conn.prepareStatement(query2);
+            pstmt2.setInt(1, id);
+            pstmt2.executeUpdate();
             return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
         }
+        return false;
     }
     public ArrayList<Vak> krijgAlleVakken(Student student){
         ArrayList<Vak> vakken = new ArrayList<Vak>();

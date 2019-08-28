@@ -36,23 +36,29 @@ public class KlasHibernateDaoImpl extends HibernateBaseDao implements KlasDAO{
 
 	public Klas save(Klas klas) throws SQLException {
 		Session session = getSession();
+		session.beginTransaction();
 		session.save(klas);
 		session.getTransaction().commit();
+		session.close();
 		return klas;
 	}
 
 	public Klas update(Klas klas) throws SQLException {
 		Session session = getSession();
+		session.beginTransaction();
 		session.update(klas);
 		session.getTransaction().commit();
+		session.close();
 		return klas;
 	}
 
 	public boolean delete(Klas klas) throws SQLException {
 		try {
 			Session session = getSession();
+			session.beginTransaction();
 			session.delete(klas);
 			session.getTransaction().commit();
+			session.close();
 			return true;
 		} catch (Exception e) {
 			System.out.println(e);

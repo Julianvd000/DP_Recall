@@ -23,14 +23,12 @@ public class StudentHibernateDaoImpl extends HibernateBaseDao implements Student
 		TypedQuery<Student> query = session.createQuery(q);
 
 		List<Student> results = query.getResultList();
-
 		return results;
 	}
 	
 	public Object findByID(int id) throws SQLException {
 		Session session = getSession();
 		Object s = session.get(Student.class, id);
-		session.close();
 		return s;
 	}
     
@@ -39,14 +37,16 @@ public class StudentHibernateDaoImpl extends HibernateBaseDao implements Student
 		s.beginTransaction();
 		s.save(student);
 		s.getTransaction().commit();
+		s.close();
 		return student;
 	}
 
 	public Student update(Student student) throws SQLException {
 		Session s = getSession();
 		s.beginTransaction();
-		s.save(student);
+		s.update(student);
 		s.getTransaction().commit();
+		s.close();
 		return student;
 	}
 
@@ -56,6 +56,7 @@ public class StudentHibernateDaoImpl extends HibernateBaseDao implements Student
 			s.beginTransaction();
 			s.delete(student);
 			s.getTransaction().commit();
+			s.close();
 			return true;
 		} catch (Exception e) {
 			System.out.println(e);
